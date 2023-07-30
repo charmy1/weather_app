@@ -1,8 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+
 part 'current_weather_model.g.dart';
 
 @HiveType(typeId: 0)
-class CurrentWeatherModel {
+class CurrentWeatherModel extends Equatable {
   @HiveField(0)
   Coord? coord;
 
@@ -40,7 +42,7 @@ class CurrentWeatherModel {
   String? name;
 
   @HiveField(12)
-  int? cod;
+  String? cod;
 
   CurrentWeatherModel({
     this.coord,
@@ -74,7 +76,7 @@ class CurrentWeatherModel {
       timezone: json['timezone'],
       id: json['id'],
       name: json['name'],
-      cod: json['cod'],
+      cod: json['cod'].toString(),
     );
   }
 
@@ -107,15 +109,32 @@ class CurrentWeatherModel {
     data['cod'] = this.cod;
     return data;
   }
+
+  @override
+  List<Object?> get props => [
+        coord,
+        weather,
+        base,
+        main,
+        visibility,
+        wind,
+        clouds,
+        dt,
+        sys,
+        timezone,
+        id,
+        name,
+        cod,
+      ];
 }
 
 @HiveType(typeId: 1)
-class Coord {
+class Coord  extends Equatable{
   @HiveField(0)
-  double? lon;
+  num? lon;
 
   @HiveField(1)
-  double? lat;
+  num? lat;
 
   Coord({
     this.lon,
@@ -135,10 +154,13 @@ class Coord {
     data['lat'] = this.lat;
     return data;
   }
+
+  @override
+  List<Object?> get props => [lat,lon];
 }
 
 @HiveType(typeId: 2)
-class Weather {
+class Weather extends Equatable{
   @HiveField(0)
   int? id;
 
@@ -175,21 +197,24 @@ class Weather {
     data['icon'] = this.icon;
     return data;
   }
+
+  @override
+  List<Object?> get props => [id,main,description,icon];
 }
 
 @HiveType(typeId: 3)
-class Main {
+class Main extends Equatable{
   @HiveField(0)
-  double? temp;
+  num? temp;
 
   @HiveField(1)
-  double? feelsLike;
+  num? feelsLike;
 
   @HiveField(2)
-  double? tempMin;
+  num? tempMin;
 
   @HiveField(3)
-  double? tempMax;
+  num? tempMax;
 
   @HiveField(4)
   int? pressure;
@@ -227,12 +252,15 @@ class Main {
     data['humidity'] = this.humidity;
     return data;
   }
+
+  @override
+  List<Object?> get props => [temp,feelsLike,tempMin,tempMax,pressure,humidity];
 }
 
 @HiveType(typeId: 4)
-class Wind {
+class Wind extends Equatable{
   @HiveField(0)
-  double? speed;
+  num? speed;
 
   @HiveField(1)
   int? deg;
@@ -255,10 +283,13 @@ class Wind {
     data['deg'] = this.deg;
     return data;
   }
+
+  @override
+  List<Object?> get props => [speed,deg];
 }
 
 @HiveType(typeId: 5)
-class Clouds {
+class Clouds extends Equatable{
   @HiveField(0)
   int? all;
 
@@ -277,10 +308,13 @@ class Clouds {
     data['all'] = this.all;
     return data;
   }
+
+  @override
+  List<Object?> get props =>[all];
 }
 
 @HiveType(typeId: 6)
-class Sys {
+class Sys extends Equatable{
   @HiveField(0)
   int? type;
 
@@ -323,4 +357,7 @@ class Sys {
     data['sunset'] = this.sunset;
     return data;
   }
+
+  @override
+  List<Object?> get props => [type,id,country,sunrise,sunset];
 }

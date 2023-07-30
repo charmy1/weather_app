@@ -1,4 +1,6 @@
 import 'dart:core';
+import 'package:equatable/equatable.dart';
+
 import 'current_weather_model.dart';
 import 'package:hive/hive.dart';
 part 'forecast_weather_model.g.dart';
@@ -6,7 +8,7 @@ part 'forecast_weather_model.g.dart';
 
 
 @HiveType(typeId: 7)
-class ForecastWeatherModel {
+class ForecastWeatherModel extends Equatable{
   @HiveField(0)
   String? cod;
 
@@ -56,10 +58,13 @@ class ForecastWeatherModel {
     }
     return data;
   }
+
+  @override
+  List<Object?> get props => [cod,message,cnt,list,city];
 }
 
 @HiveType(typeId: 8)
-class WeatherList {
+class WeatherList extends Equatable{
   @HiveField(0)
   int? dt;
 
@@ -79,7 +84,7 @@ class WeatherList {
   int? visibility;
 
   @HiveField(6)
-  double? pop;
+  num? pop;
 
   @HiveField(7)
   Rain? rain;
@@ -147,12 +152,15 @@ class WeatherList {
     data['dt_txt'] = dtTxt;
     return data;
   }
+
+  @override
+  List<Object?> get props => [dt,main,weather,clouds,wind,visibility,pop,rain,dtTxt];
 }
 
 @HiveType(typeId: 9)
-class Rain {
+class Rain extends Equatable{
   @HiveField(0)
-  double? d3h;
+  num? d3h;
 
   Rain({this.d3h});
 
@@ -165,10 +173,13 @@ class Rain {
     data['3h'] = d3h;
     return data;
   }
+
+  @override
+  List<Object?> get props => [d3h];
 }
 
 @HiveType(typeId: 10)
-class Sys {
+class Sys extends Equatable{
   @HiveField(0)
   String? pod;
 
@@ -183,10 +194,13 @@ class Sys {
     data['pod'] = pod;
     return data;
   }
+
+  @override
+  List<Object?> get props => [pod];
 }
 
 @HiveType(typeId: 11)
-class City {
+class City extends Equatable{
   @HiveField(0)
   int? id;
 
@@ -249,15 +263,18 @@ class City {
     data['sunset'] = sunset;
     return data;
   }
+
+  @override
+  List<Object?> get props => [id,name,coord,country,population,timezone,sunrise,sunset];
 }
 
 @HiveType(typeId: 12)
-class Coord {
+class Coord extends Equatable {
   @HiveField(0)
-  double? lat;
+  num? lat;
 
   @HiveField(1)
-  double? lon;
+  num? lon;
 
   Coord({this.lat, this.lon});
 
@@ -271,4 +288,7 @@ class Coord {
     data['lon'] = lon;
     return data;
   }
+
+  @override
+  List<Object?> get props => [lat,lon];
 }

@@ -27,7 +27,7 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
   @override
   Future<CurrentWeatherModel> getCurrentWeather({required String cityName}) async {
     final response = await client.get(
-      Strings.baseUrl+Strings.weather+"?appid="+Strings.appId+"&q="+cityName as Uri,
+      Uri.parse("${Strings.baseUrl}${Strings.weather}?appid=${Strings.appId}&q=$cityName"),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -43,7 +43,7 @@ class WeatherRemoteDataSourceImpl implements WeatherRemoteDataSource {
   @override
   Future<ForecastWeatherModel> getForecastWeather({required String cityName}) async {
     final response = await client.get(
-      Strings.baseUrl+Strings.forecast+"?appid="+Strings.appId+"&q="+cityName as Uri,
+      Uri.parse("${Strings.baseUrl}${Strings.forecast}?appid=${Strings.appId}&q=$cityName"),
       headers: {
         'Content-Type': 'application/json',
       },
