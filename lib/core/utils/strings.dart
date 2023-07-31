@@ -9,6 +9,6 @@ class Strings {
     "Silverstone",
     "São Paulo",
     "Melbourne",
-    " Monte Carlo",
+    "Monte Carlo",
   ];
 }

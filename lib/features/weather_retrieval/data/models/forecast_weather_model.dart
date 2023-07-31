@@ -268,27 +268,3 @@ class City extends Equatable{
   List<Object?> get props => [id,name,coord,country,population,timezone,sunrise,sunset];
 }
 
-@HiveType(typeId: 12)
-class Coord extends Equatable {
-  @HiveField(0)
-  num? lat;
-
-  @HiveField(1)
-  num? lon;
-
-  Coord({this.lat, this.lon});
-
-  factory Coord.fromJson(Map<String, dynamic> json) {
-    return Coord(lat: json['lat'], lon: json['lon']);
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['lat'] = lat;
-    data['lon'] = lon;
-    return data;
-  }
-
-  @override
-  List<Object?> get props => [lat,lon];
-}
