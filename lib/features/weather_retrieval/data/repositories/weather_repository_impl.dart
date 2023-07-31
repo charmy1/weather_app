@@ -68,6 +68,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
 
       try {
         List<CurrentWeatherModel> results = await Future.wait(futures);
+        await localDataSource.cacheCurrentWeatherForCityList(results);
         return Right(results);
       } catch (e, s) {
         return Left(ServerFailure());
