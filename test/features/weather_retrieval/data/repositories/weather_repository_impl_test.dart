@@ -13,8 +13,6 @@ import 'package:weather_app/features/weather_retrieval/data/datasources/weather_
 import 'package:weather_app/features/weather_retrieval/data/models/current_weather_model.dart';
 import 'package:weather_app/features/weather_retrieval/data/models/forecast_weather_model.dart';
 import 'package:weather_app/features/weather_retrieval/data/repositories/weather_repository_impl.dart';
-import 'package:weather_app/features/weather_retrieval/domain/repositories/weather_repository.dart';
-
 import '../../../../jsonParser/json_reader.dart';
 import 'weather_repository_impl_test.mocks.dart';
 @GenerateMocks([WeatherRemoteDataSource,WeatherLocalDataSource,NetworkInfo],)
@@ -218,13 +216,13 @@ void main(){
         'should return last locally cached data when the cached data is present',
             () async {
           // arrange
-          when(mockWeatherLocalDataSource.getCachedForecastWeather())
+          when(mockWeatherLocalDataSource.getCachedForecastWeather(cityName: "Ahmedabad"))
               .thenAnswer((_) async => forecastWeather);
           // act
           final result = await repository.getForecast(cityName: "Ahmedabad");
           // assert
           verifyZeroInteractions(mockWeatherRemoteDataSource);
-          verify(mockWeatherLocalDataSource.getCachedForecastWeather());
+          verify(mockWeatherLocalDataSource.getCachedForecastWeather(cityName: "Ahmedabad"));
           expect(result, equals(Right(forecastWeather)));
         },
       );

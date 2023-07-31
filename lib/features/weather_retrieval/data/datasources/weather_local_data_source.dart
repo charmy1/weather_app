@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:weather_app/features/weather_retrieval/data/models/current_weather_model.dart';
@@ -14,7 +16,7 @@ abstract class WeatherLocalDataSource {
   /// the user had an internet connection.
   ///
   /// Throws [CacheException] if no cached data is present.
-  Future<ForecastWeatherModel> getCachedForecastWeather();
+  Future<ForecastWeatherModel> getCachedForecastWeather({required String cityName});
   /// Gets the cached [List<CurrentWeatherModel>] which was gotten the last time
   /// the user had an internet connection.
   ///
@@ -32,7 +34,7 @@ abstract class WeatherLocalDataSource {
 class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
   final Box<CurrentWeatherModel> currentWeatherBox;
   final Box<ForecastWeatherModel> forecastWeatherBox;
-  final Box<List<CurrentWeatherModel>> currentWeatherListBox;
+  final Box<String> currentWeatherListBox;
 
   WeatherLocalDataSourceImpl( {required this.currentWeatherBox,required this.forecastWeatherBox,required this.currentWeatherListBox,});
 
@@ -49,17 +51,17 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
 
   @override
   Future<void> cacheCurrentWeather(CurrentWeatherModel currentWeatherModel) async {
-    currentWeatherBox.put(0, currentWeatherModel);
+    await currentWeatherBox.put(0, currentWeatherModel);
   }
 
   @override
   Future<void> cacheForeCastWeather(ForecastWeatherModel forecastWeatherModel) async{
-    forecastWeatherBox.put(0,forecastWeatherModel);
+    await forecastWeatherBox.put(forecastWeatherModel.city?.name??"",forecastWeatherModel);
   }
 
   @override
-  Future<ForecastWeatherModel> getCachedForecastWeather() {
-    ForecastWeatherModel? forecastWeatherModel = forecastWeatherBox.get(0);
+  Future<ForecastWeatherModel> getCachedForecastWeather({required String cityName}) {
+    ForecastWeatherModel? forecastWeatherModel = forecastWeatherBox.get(cityName);
     if (forecastWeatherModel != null) {
       return Future.value(forecastWeatherModel);
     } else {
@@ -69,16 +71,35 @@ class WeatherLocalDataSourceImpl implements WeatherLocalDataSource {
 
   @override
   Future<void> cacheCurrentWeatherForCityList(List<CurrentWeatherModel> currentWeatherModel) async{
-    currentWeatherListBox.put("list", currentWeatherModel);
+    await currentWeatherListBox.put("list", json.encode(currentWeatherModel.map((e) => e.toJson()).toList()));
   }
 
   @override
-  Future<List<CurrentWeatherModel>> getCachedCurrentWeatherList() {
-    List<CurrentWeatherModel>? currentWeatherModelList = currentWeatherListBox.get("list");
+  Future<List<CurrentWeatherModel>> getCachedCurrentWeatherList() async {
+
+   if(currentWeatherListBox.get("list")!=null) {
+     try {
+       List<CurrentWeatherModel> currentList = (json.decode(
+           currentWeatherListBox.get("list")!) as List<dynamic>)
+           .map((item) => CurrentWeatherModel.fromJson(item))
+           .toList();
+       return Future.value(currentList);
+     }
+     catch (e, s) {
+       debugPrint(s.toString());
+        throw CacheException();
+     }
+   }
+   else{
+     throw CacheException();
+   }
+    /*List<CurrentWeatherModel>? currentWeatherModelList = currentWeatherListBox.get("list");
+    print(currentWeatherModelList);
     if (currentWeatherModelList?.isNotEmpty??false) {
       return Future.value(currentWeatherModelList);
     } else {
       throw CacheException();
-    }
+    }*/
+
   }
 }

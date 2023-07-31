@@ -17,12 +17,12 @@ import 'weather_local_data_source_test.mocks.dart';
 void main() {
   late MockBox<CurrentWeatherModel> mockBoxCurrentWeather ;
   late MockBox<ForecastWeatherModel> mockBoxForecastWeather;
-  late MockBox<List<CurrentWeatherModel>> mockBoxCurrentWeatherList ;
+  late MockBox<String> mockBoxCurrentWeatherList ;
   late WeatherLocalDataSource mockWeatherLocalDataSource;
   setUp(() {
     mockBoxCurrentWeather = MockBox<CurrentWeatherModel>();
     mockBoxForecastWeather = MockBox<ForecastWeatherModel>();
-    mockBoxCurrentWeatherList=MockBox<List<CurrentWeatherModel>>();
+    mockBoxCurrentWeatherList=MockBox<String>();
     mockWeatherLocalDataSource = WeatherLocalDataSourceImpl(
       currentWeatherListBox: mockBoxCurrentWeatherList,
         currentWeatherBox: mockBoxCurrentWeather,
@@ -59,7 +59,7 @@ void main() {
       when(mockBoxForecastWeather.get(any))
           .thenReturn(forecastWeather);
       // act
-      final result = await mockWeatherLocalDataSource.getCachedForecastWeather();
+      final result = await mockWeatherLocalDataSource.getCachedForecastWeather(cityName: "Ahmedabad");
       // assert
       verify(mockBoxForecastWeather.get(any));
       expect(result, equals(forecastWeather));
@@ -71,7 +71,7 @@ void main() {
       // act
       final result =  mockWeatherLocalDataSource.getCachedForecastWeather;
       // assert
-      expect(() => result(), throwsA(const TypeMatcher<CacheException>()));
+      expect(() => result(cityName:"Ahmedabad" ), throwsA(const TypeMatcher<CacheException>()));
     });
   });
 
@@ -81,12 +81,12 @@ void main() {
     test('should return List<CurrentWeather> when present in cache ', () async {
       // arrange
       when(mockBoxCurrentWeatherList.get(any))
-          .thenReturn([currentWeather,currentWeather]);
+          .thenReturn(json.encode([currentWeather].map((e) => e.toJson()).toList()));
       // act
       final result = await mockWeatherLocalDataSource.getCachedCurrentWeatherList();
       // assert
       verify(mockBoxCurrentWeatherList.get(any));
-      expect(result, equals([currentWeather,currentWeather]));
+      expect(result, equals([currentWeather,]));
     });
     test('should throw a CacheException when there is not a cached value', () async {
       // arrange

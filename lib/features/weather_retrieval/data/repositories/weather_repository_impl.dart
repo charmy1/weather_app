@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:weather_app/core/error/failures.dart';
 import 'package:weather_app/core/utils/strings.dart';
@@ -29,7 +30,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
       }
     } else {
       try {
-        final forecastWeather = await localDataSource.getCachedForecastWeather();
+        final forecastWeather = await localDataSource.getCachedForecastWeather(cityName: cityName);
         return Right(forecastWeather);
       } on CacheException {
         return Left(CacheFailure());
@@ -71,6 +72,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
         await localDataSource.cacheCurrentWeatherForCityList(results);
         return Right(results);
       } catch (e, s) {
+        debugPrint(s.toString());
         return Left(ServerFailure());
 
       }
