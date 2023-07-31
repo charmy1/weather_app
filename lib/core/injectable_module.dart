@@ -6,6 +6,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:weather_app/features/weather_retrieval/data/models/current_weather_model.dart';
 import 'package:weather_app/features/weather_retrieval/data/models/forecast_weather_model.dart';
 
+import 'package:weather_app/features/weather_retrieval/data/models/current_weather_model.dart' as current;
+import 'package:weather_app/features/weather_retrieval/data/models/forecast_weather_model.dart'as forecast;
 
 
 @module
@@ -21,11 +23,22 @@ abstract class InjectableModule {
   @singleton
   Future<HiveInterface> get hive async {
     await Hive.initFlutter();
+
+
+
+    Hive.registerAdapter(CloudsAdapter());
+    Hive.registerAdapter(WeatherAdapter());
+    Hive.registerAdapter(CityAdapter());
+    Hive.registerAdapter(MainAdapter());
+    Hive.registerAdapter(CoordAdapter());
+    Hive.registerAdapter(WindAdapter());
+    Hive.registerAdapter(RainAdapter());
+    Hive.registerAdapter(current.SysAdapter());
+    Hive.registerAdapter(forecast.SysAdapter());
+    Hive.registerAdapter(WeatherListAdapter());
     Hive.registerAdapter(CurrentWeatherModelAdapter());
     Hive.registerAdapter(ForecastWeatherModelAdapter());
-    Hive.registerAdapter(WeatherListAdapter());
-    Hive.registerAdapter(CloudsAdapter());
-    Hive.registerAdapter(CityAdapter());
+
     return Hive;
   }
 
