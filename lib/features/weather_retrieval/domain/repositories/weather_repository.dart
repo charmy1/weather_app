@@ -6,4 +6,5 @@ import 'package:weather_app/features/weather_retrieval/data/models/forecast_weat
 abstract class WeatherRepository {
   Future<Either<Failure, CurrentWeatherModel>> getWeather({required String cityName});
   Future<Either<Failure, ForecastWeatherModel>> getForecast({required String cityName});
+  Future<Either<Failure, List<CurrentWeatherModel>>> getWeatherForCityList({required List<String> cityList});
 }

@@ -39,5 +39,11 @@ abstract class InjectableModule {
   @singleton
   Future<Box<ForecastWeatherModel>> currentWeatherForecastBox(HiveInterface hive) =>
       hive.openBox<ForecastWeatherModel>("currentWeatherForecastModel");
+
+
+  @preResolve
+  @singleton
+  Future<Box<List<CurrentWeatherModel>>> currentWeatherListBox(HiveInterface hive) =>
+      hive.openBox<List<CurrentWeatherModel>>("currentWeatherList");
 }
 
