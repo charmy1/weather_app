@@ -33,7 +33,7 @@ void setUpMockHttpClientFailure404() {
   when(mockClient.get(any, headers: anyNamed('headers')))
       .thenAnswer((_) async => http.Response('Something went wrong', 404));
 }
-group('Current Weather', () {
+group('Current Weather,search by city name', () {
   final city = "Ahmedabad";
   final currentWeather =
   CurrentWeatherModel.fromJson(json.decode(jsonParser('current.json')));
@@ -61,7 +61,7 @@ group('Current Weather', () {
       // arrange
           setUpCurrentWeatherSuccess200();
       // act
-          var result =await weatherRemoteDataSource.getCurrentWeather(cityName: city);
+          var result =await weatherRemoteDataSource.getCurrentWeatherSearchByCityName(cityName: city);
       // assert
       expect(result, equals(currentWeather));
     },
@@ -73,7 +73,7 @@ group('Current Weather', () {
       // arrange
       setUpMockHttpClientFailure404();
       // act
-      final call = weatherRemoteDataSource.getCurrentWeather;
+      final call = weatherRemoteDataSource.getCurrentWeatherSearchByCityName;
       // assert
       expect(() => call(cityName: city), throwsA(TypeMatcher<ServerException>()));
     },

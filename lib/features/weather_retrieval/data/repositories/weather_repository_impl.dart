@@ -1,14 +1,15 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:weather_app/core/error/failures.dart';
+import 'package:weather_app/core/utils/strings.dart';
 import 'package:weather_app/features/weather_retrieval/data/datasources/weather_local_data_source.dart';
 import 'package:weather_app/features/weather_retrieval/data/datasources/weather_remote_data_source.dart';
 import 'package:weather_app/features/weather_retrieval/data/models/current_weather_model.dart';
 import 'package:weather_app/features/weather_retrieval/data/models/forecast_weather_model.dart';
 import 'package:weather_app/features/weather_retrieval/domain/repositories/weather_repository.dart';
-
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/network_info.dart';
-
+@LazySingleton(as: WeatherRepository)
 class WeatherRepositoryImpl implements WeatherRepository {
   final WeatherRemoteDataSource remoteDataSource;
   final WeatherLocalDataSource localDataSource;
@@ -55,5 +56,39 @@ class WeatherRepositoryImpl implements WeatherRepository {
       }
     }
   }
-  
+
+  @override
+  Future<Either<Failure, List<CurrentWeatherModel>>> getWeatherForCityList({required List<String> cityList}) async {
+    List<Future<CurrentWeatherModel>> futures = [];
+    if (await networkInfo.isConnected) {
+      for (String cityName in Strings.cityList) {
+        final future = remoteDataSource.getCurrentWeather(cityName: cityName);
+        futures.add(future);
+      }
+
+      try {
+        List<CurrentWeatherModel> results = await Future.wait(futures);
+        return Right(results);
+      } catch (e, s) {
+        return Left(ServerFailure());
+
+      }
+    }
+    else{
+      try {
+        final currentWeatherList = await localDataSource.getCachedCurrentWeatherList();
+        return Right(currentWeatherList);
+      } on CacheException {
+        return Left(CacheFailure());
+      }
+    }
+  }
+
+
+
 }
+
+
+
+
+
