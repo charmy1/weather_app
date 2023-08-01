@@ -1,16 +1,43 @@
-# weather_app
+# Flutter Weather App
+Built with clean architecture and domain driven design with clear separation of Presentation, Domain and Data layers.
 
-A new Flutter project.
+## Features
 
-## Getting Started
+- Current Weather information for below cities in ListView
 
-This project is a starting point for a Flutter application.
+  🔆 Silverstone, UK
 
-A few resources to get you started if this is your first Flutter project:
+  🔆  São Paulo, Brazil
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+  🔆 Melbourne, Australia
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  🔆 Monte Carlo, Monaco.
+
+- 5-day weather forecast available for each city.
+
+- Offline Caching 
+
+## Installation
+
+Run the below script  to set up the project on your local machine:
+```sh
+sh script/code_generator.sh
+```
+## State Management - flutter_bloc
+## Dependency Injection - injectable
+## Testing - mockito
+## Offline Caching -hive
+
+API documentation:
+- https://openweathermap.org/current
+- https://openweathermap.org/forecast
+
+-Retrieves current and forecast data for 4 cities when device is online
+![](online.gif)
+
+-Retrieves current and forecast data if available on cache when device is offline
+![](airplane.gif)
+
+
+
+
