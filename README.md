@@ -23,6 +23,8 @@ Run the below script  to set up the project on your local machine:
 ```sh
 sh script/code_generator.sh
 ```
+[![codecov](https://codecov.io/gh/charmy1/weather_app/branch/main/graph/badge.svg)](https://codecov.io/gh/charmy1/weather_app)
+
 ## State Management - flutter_bloc
 ## Dependency Injection - injectable
 ## Testing - mockito
