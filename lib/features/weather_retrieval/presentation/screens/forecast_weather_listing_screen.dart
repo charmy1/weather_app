@@ -48,9 +48,22 @@ class _ForeCastWeatherListingState extends State<ForeCastWeatherListing> {
             itemCount: responseModel.list?.length ?? 0,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(responseModel.list?[index].dtTxt ?? ""),
-                subtitle: Text("${widget.cityName}  ${(responseModel.list?[index].main?.temp).toString() ?? ""}"),
-              );
+                  title: Text(responseModel.list?[index].dtTxt ?? ""),
+                  subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(widget.cityName),
+                        Text(
+                            responseModel.list?[index].weather?.first.main ?? ""),
+                        Text(responseModel.list?[index]
+                            .weather
+                            ?.first
+                            .description ??
+                            ""),
+                        Text((responseModel.list?[index].main?.temp).toString() ?? ""),
+                      ]));
+                //subtitle: Text("${responseModel.list?[index].} - ${(responseModel.list?[index].main?.temp).toString() ?? ""}-${(responseModel.list?[index].main?.feelsLike).toString() ?? ""}"),
+
             },
           )
               : const Center(
@@ -61,3 +74,8 @@ class _ForeCastWeatherListingState extends State<ForeCastWeatherListing> {
     );
   }
 }
+
+
+
+
+

@@ -55,28 +55,37 @@ class _CurrentWeatherListingWidgetState
           child: CircularProgressIndicator(),
         )
             : (responseModel.isNotEmpty)
-            ? ListView.builder(
-          itemCount: responseModel.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ForeCastWeatherListing(
-                        cityName: responseModel[index].name ?? ""),
-                  ),
-                );
-              },
-              title: Text(responseModel[index].name ?? ""),
-              subtitle: Text(
-                  responseModel[index].weather?.first.description ??
-                      "${responseModel[index].main?.temp??0}"),
-            );
-          },
-        )
-            : const Center(
-          child: Text("Something went wrong"),
-        );
+                ? ListView.builder(
+                    itemCount: responseModel.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ForeCastWeatherListing(
+                                    cityName: responseModel[index].name ?? ""),
+                              ),
+                            );
+                          },
+                          title: Text(responseModel[index].name ?? ""),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                            Text(
+                                responseModel[index].weather?.first.main ?? ""),
+                            Text(responseModel[index]
+                                    .weather
+                                    ?.first
+                                    .description ??
+                                ""),
+                            Text((responseModel[index].main?.temp ?? 0)
+                                .toString()),
+                          ]));
+                    },
+                  )
+                : const Center(
+                    child: Text("Something went wrong"),
+                  );
       },
     );
   }
