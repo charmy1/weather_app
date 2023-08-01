@@ -51,30 +51,5 @@ class WeatherState extends Equatable {
         forecastWeatherModel,
       ];
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is WeatherState &&
-              runtimeType == other.runtimeType &&
-              isCurrentLoading == other.isCurrentLoading &&
-              isForecastLoading == other.isForecastLoading &&
-              isSearchLoading == other.isSearchLoading &&
-              searchCurrentWeatherModel == other.searchCurrentWeatherModel &&
-              listCurrentWeatherModel?.fold(() => null, (a) =>
-                  a.fold((l) => l, (r) => r)) ==
-                  other.listCurrentWeatherModel?.fold(() => null, (a) =>
-                      a.fold((l) => l, (r) => r)) &&
-              forecastWeatherModel == other.forecastWeatherModel;
-
-  @override
-  int get hashCode =>
-      isCurrentLoading.hashCode ^
-      isForecastLoading.hashCode ^
-      isSearchLoading.hashCode ^
-      searchCurrentWeatherModel.hashCode ^
-      // Generate hashCode based on the contents of Option<Either> for listCurrentWeatherModel
-      (listCurrentWeatherModel?.fold(() => null, (a) =>
-          a.fold((l) => l.hashCode, (r) => r.hashCode)) ?? 0) ^
-      forecastWeatherModel.hashCode;
 
 }

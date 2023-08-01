@@ -79,11 +79,34 @@ late MockNetworkInfo networkInfo;
         ),
       ],
     );
-// Test FetchCurrentWeatherForAllCities event
 
-    // Test FetchCurrentWeatherForAllCities event
+    blocTest<WeatherBloc, WeatherState>(
+      'emits [isCurrentLoading=true, isCurrentLoading=false] when FetchCurrentWeatherForAllCities is added',
+      build: () => weatherBloc,
+      act: (bloc) async {
+        // Mock the result of the weather repository call
+        when(weatherRepository.getWeatherForCityList(cityList: Strings.cityList))
+            .thenAnswer((_) async => Right([currentWeather, currentWeather, currentWeather]));
+
+
+        bloc.add(FetchCurrentWeatherForAllCities());
+      },
+      expect: () => [
+        WeatherState().copyWith(isCurrentLoading: true),
+        WeatherState().copyWith(
+          isCurrentLoading: false,
+          listCurrentWeatherModel: Some(Right([
+            currentWeather,
+            currentWeather,
+            currentWeather,
+          ])),
+        ),
+      ],
+    );
+
+
+   /* // Test FetchCurrentWeatherForAllCities event
     test('emits [isCurrentLoading=true, isCurrentLoading=false] when FetchCurrentWeatherForAllCities is added', () async*{
-      final currentWeather = CurrentWeatherModel(/* Your test data */);
       final cityList = Strings.cityList;
 
       when(weatherRepository.getWeatherForCityList(cityList: cityList))
@@ -106,6 +129,6 @@ late MockNetworkInfo networkInfo;
 
       weatherBloc.add(FetchCurrentWeatherForAllCities());
     });
-  });
+*/  });
 
 }

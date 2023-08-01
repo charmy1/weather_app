@@ -42,9 +42,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
 
   }
-  @disposeMethod
-  void dispose(){
-    Hive.close();
-  }
+
 }
 

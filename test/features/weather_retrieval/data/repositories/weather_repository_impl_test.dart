@@ -228,6 +228,21 @@ void main(){
       );
 
       test(
+        'should return CacheFailure when there is no cached data present ,getForecast',
+            () async {
+          // arrange
+          when(mockWeatherLocalDataSource.getCachedForecastWeather(cityName: "Ahmedabad"))
+              .thenThrow(CacheException());
+          // act
+          final result = await repository.getForecast(cityName: "Ahmedabad");
+          // assert
+          verifyZeroInteractions(mockWeatherRemoteDataSource);
+          verify(mockWeatherLocalDataSource.getCachedForecastWeather(cityName: "Ahmedabad"));
+          expect(result, equals(Left(CacheFailure())));
+        },
+      );
+
+      test(
         'should return CacheFailure when there is no cached data present',
             () async {
           // arrange

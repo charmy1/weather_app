@@ -56,6 +56,18 @@ group('Current Weather,search by city name', () {
   );
 
   test(
+    'should return CurrentWeatherModel with just cityName when the response code is 404 or other',
+        () async {
+      // arrange
+      setUpMockHttpClientFailure404();
+      // act
+      final result = await weatherRemoteDataSource.getCurrentWeather(cityName: city);
+      // assert
+      expect(result, equals(CurrentWeatherModel(name: city)));
+    },
+  );
+
+  test(
     'should return CurrentWeatherModel when the response code is 200 (success)',
         () async {
       // arrange
